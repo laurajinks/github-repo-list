@@ -11,12 +11,12 @@ export default function Login() {
   const location = useLocation()
 
   useEffect(() => {
-    if (data.loading) return
+    if (data.loading || data.error) return
     const {search = ''} = location
     const hasCode = search.includes('?code=')
     if (hasCode) {
-      const newUrl = search.split('?code=')
       setData(d => ({ ...d, loading: true }))
+      const newUrl = search.split('?code=')
 
       const requestData = {
         client_id: state.clientID,
@@ -27,18 +27,17 @@ export default function Login() {
 
       axios.post(state.proxyURL, requestData)
         .then(res => {
-          console.log('res', res)
           dispatch({
             type: 'login',
             payload: { accessToken: res.data}
           })
         })
-        // .catch(err => {
-        //   setData({
-        //     loading: false,
-        //     error: true
-        //   })
-        // })
+        .catch(err => {
+          setData({
+            loading: false,
+            error: true
+          })
+        })
     }
   }, [state, dispatch, location, data])
 
@@ -47,12 +46,16 @@ export default function Login() {
   }
 
   return (
-    <>
-      <a
-        href={`https://github.com/login/oauth/authorize?scope=user%20repo%20public_repo&client_id=${clientID}&redirect_uri=${redirectURI}`}
-      >
-        <span>Login with GitHub</span>
-      </a>
-    </>
+    <div className='flex justify-around mb-6'>
+      {data.loading ? (
+        <span>Loading...</span>
+      ) : (
+        <a
+          href={`https://github.com/login/oauth/authorize?scope=user%20repo%20public_repo&client_id=${clientID}&redirect_uri=${redirectURI}`}
+        >
+          <span>Login with GitHub</span>
+        </a>
+      )}
+    </div>
   )
 }

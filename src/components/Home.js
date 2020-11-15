@@ -6,7 +6,7 @@ import axios from 'axios'
 import Repo from './Repo'
 
 const Home = () => {
-  const {state, dispatch} = useContext(AuthContext)
+  const {state} = useContext(AuthContext)
   const [data, setData] = useState({})
 
   useEffect(() => {
@@ -25,7 +25,6 @@ const Home = () => {
 
   return (
     <>
-    <button onClick={() => dispatch({type: 'logout'})}>Log Out</button>
     {repos.map(repo => (
       <Repo key={repo.id} data={repo} />
     ))}

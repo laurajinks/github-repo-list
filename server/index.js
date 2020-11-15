@@ -23,6 +23,10 @@ const RepoQuery = `query viewer {
         url
         id
         description
+        owner {
+          avatarUrl(size: 50)
+          url
+        }
       }
     }
   }
