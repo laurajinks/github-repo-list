@@ -1,20 +1,23 @@
 export const initialState = {
-  isAuth = JSON.parse(localStorage.getItem('isAuth')) || false,
-  user = JSON.parse(localStorage.getItem('user')) || null,
+  isAuth: JSON.parse(localStorage.getItem('isAuth')) || false,
+  accessToken: JSON.parse(localStorage.getItem('accessToken')) || null,
   clientID: process.env.REACT_APP_CLIENT_ID,
   redirectURI: process.env.REACT_APP_REDIRECT_URI,
   clientSecret: process.env.REACT_APP_CLIENT_SECRET,
+  proxyURL: process.env.REACT_APP_PROXY_URL
 }
 
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'login': {
-      localStorage.setItem("user", JSON.stringify(action.payload.user))
-      localStorage.setItem('isAuth', JSON.stringify(action.payload.isLoggedIn))
+      localStorage
+      .setItem('accessToken', JSON.stringify(action.payload.accessToken))
+      localStorage
+      .setItem('isAuth', JSON.stringify(true))
       return {
         ...state,
-        isAuth: action.payload.isLoggedIn,
-        user: action.payload.user
+        isAuth: true,
+        accessToken: action.payload.accessToken
       };
     }
     case 'logout': {
