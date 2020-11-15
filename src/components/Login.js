@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useContext} from "react"
-import {Redirect, useLocation} from "react-router-dom"
-import {AuthContext} from "../App"
+import React, {useState, useEffect, useContext} from 'react'
+import {Redirect, useLocation} from 'react-router-dom'
+import {AuthContext} from '../App'
 import axios from 'axios'
 
 

@@ -1,7 +1,9 @@
 import Axios from 'axios'
 import React, {useState, useEffect, useContext, useMemo} from 'react'
+import {Redirect} from 'react-router-dom'
 import {AuthContext} from '../App'
 import axios from 'axios'
+import Repo from './Repo'
 
 const Home = () => {
   const {state, dispatch} = useContext(AuthContext)
@@ -17,10 +19,15 @@ const Home = () => {
 
   const repos = useMemo(() => data.nodes || [], [data])
 
+  if (!state.isAuth) {
+    return <Redirect to='/login' />
+  }
+
   return (
     <>
+    <button onClick={() => dispatch({type: 'logout'})}>Log Out</button>
     {repos.map(repo => (
-      <div key={repo.id}>{repo.nameWithOwner}</div>
+      <Repo key={repo.id} data={repo} />
     ))}
     </>
   )
