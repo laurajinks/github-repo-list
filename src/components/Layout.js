@@ -8,8 +8,8 @@ const Layout = ({children}) => {
   const {isAuth} = state
   return (
     <div className="w-full h-screen">
-      <div className='flex items-center justify-between'>
-        <strong className='m-3'>
+      <div className='flex items-center justify-between bg-gray-800'>
+        <strong className='m-3 text-white'>
           Github Repository List
           </strong>
         {isAuth && (
