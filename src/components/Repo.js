@@ -1,7 +1,12 @@
-import React, {useState, useRef, useEffect} from 'react'
+import React, {useState, useRef, useEffect, useContext} from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
+import {AuthContext} from '../App'
+import {toast} from 'react-toastify'
+import Button from './common/Button'
 
 const Repo = ({data}) => {
+  const {state} = useContext(AuthContext)
   const [showEdit, setShowEdit] = useState(false)
   const [notes, setNotes] = useState('')
   const [input, setInput] = useState('')
@@ -23,9 +28,15 @@ const handleCancel = () => {
 }
 
 const handleSubmit = () => {
-  setNotes(input)
-  setInput('')
-  setShowEdit(false)
+  if (!input) return
+  axios.post(state.proxyURL + '/notes', {notes: input, id})
+  .then(res => {
+    setNotes(res.data.notes || '')
+    setInput('')
+    setShowEdit(false)
+    toast.success('Successfully Added Note')
+  })
+  .catch(err => toast.error(err.details || 'Error Adding Note'))
 }
 
   return (
@@ -35,33 +46,41 @@ const handleSubmit = () => {
           <a href={owner.url} target='_blank' className='mr-5'>
             <img src={owner.avatarUrl} alt='avatar' />
           </a>
-      <a href={url} target='_blank'>{nameWithOwner}</a>
+      <a href={url} target='_blank' className='hover:text-gray-600'>
+        {nameWithOwner}
+      </a>
         </div>
-      {description && <div><strong>Description: </strong>{description}</div>}
+      {description && (
+        <div className='mb-2'>
+          <strong>Description: </strong>{description}
+        </div>
+        )}
       {showEdit ? (
         <div>
         <div className='flex justify-center'>
           <textarea
             ref={inputRef}
             className='w-full p-1 m-1'
-            value={notes}
-            onChange={e => setNotes(e.target.value)}
+            value={input}
+            onChange={e => setInput(e.target.value)}
           />
         </div>
         <div className='flex justify-center'>
-          <button className='p-2' onClick={handleSubmit}>Save</button>
-          <button className='p-2' onClick={handleCancel}>Cancel</button>
+          <Button className='m-2' onClick={handleSubmit}>Save</Button>
+          <Button className='m-2' onClick={handleCancel}>Cancel</Button>
           </div>
         </div>
       ) : (
         <div>
-          {notes && <div><strong>Notes: </strong>{notes}</div>}
+          {notes && <div className='mb-2'><strong>Notes: </strong>{notes}</div>}
         </div>
       )}
       {!showEdit && (
-        <button onClick={handleEdit}>
-          {notes ? 'Edit' : 'Add'} Notes
-        </button>
+        <div className='flex justify-center'>
+          <Button onClick={handleEdit}>
+            {notes ? 'Edit' : 'Add'} Notes
+          </Button>
+        </div>
       )}
     </div>
   </div>

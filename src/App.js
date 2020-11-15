@@ -4,7 +4,9 @@ import Layout from './components/Layout'
 import Login from './components/Login'
 import Home from './components/Home'
 import {reducer, initialState} from './store/index'
-import './tailwind.output.css';
+import {ToastContainer} from 'react-toastify'
+import './tailwind.output.css'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const AuthContext = createContext()
 
@@ -13,6 +15,7 @@ const App = () => {
   return (
     <AuthContext.Provider value={{state, dispatch}}>
       <Layout>
+      <ToastContainer />
         <Router>
           <Switch>
             <Route path='/login' component={Login} />

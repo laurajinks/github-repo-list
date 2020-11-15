@@ -12,6 +12,7 @@ app.use(cors())
 
 const RepoQuery = `query viewer {
   viewer {
+    login
     repositories(first: 100) {
       totalCount
       pageInfo {
@@ -37,7 +38,6 @@ app.post('/auth', (req, res) => {
   axios.post(`https://github.com/login/oauth/access_token`, req.body)
     .then(response => {
       let params = new URLSearchParams(response.data)
-      console.log('access', params.get('access_token'))
       return res.status(200).json(params.get('access_token'))
     })
     .catch(error => res.status(400).json(error))
@@ -50,14 +50,17 @@ app.post('/repos', (req, res) => {
   }, 
   {headers: {Authorization: `Bearer ${accessToken}`}})
   .then(response => {
-    console.log('response', response)
     return res.status(200)
-    .json(response.data.data.viewer.repositories || [])
+    .json(response.data.data.viewer || {})
   })
-  .catch(error => {
-    console.log('error', error)
-    res.status(400).json(error)
-  })
+  .catch(error => res.status(400).json(error))
+})
+
+app.post('/notes', (req, res) => {
+  console.log('req', req.body)
+  axios.post('https://jsonplaceholder.typicode.com/posts', req.body)
+  .then(response => res.status(200).json(response.data))
+  .catch(error => res.status(400).json(error))
 })
 
 const PORT = process.env.SERVER_PORT || 5000;

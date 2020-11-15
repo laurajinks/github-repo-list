@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from 'react'
 import {Redirect, useLocation} from 'react-router-dom'
 import {AuthContext} from '../App'
 import axios from 'axios'
+import Button from './common/Button'
 
 
 export default function Login() {
@@ -25,7 +26,7 @@ export default function Login() {
         code: newUrl[1]
       }
 
-      axios.post(state.proxyURL, requestData)
+      axios.post(state.proxyURL + '/auth', requestData)
         .then(res => {
           dispatch({
             type: 'login',
@@ -46,15 +47,24 @@ export default function Login() {
   }
 
   return (
-    <div className='flex justify-around mb-6'>
+    <div className='bg-gray-100 p-3 py-56 w-auto m-3 rounded-lg'>
       {data.loading ? (
-        <span>Loading...</span>
+        <div className='flex justify-center'>
+          <Button onClick={() => {}} disabled>Loading...</Button>
+        </div>
       ) : (
-        <a
-          href={`https://github.com/login/oauth/authorize?scope=user%20repo%20public_repo&client_id=${clientID}&redirect_uri=${redirectURI}`}
-        >
-          <span>Login with GitHub</span>
-        </a>
+        <>
+          <div className='flex justify-center mb-10 font-bold text-4xl'>
+            Welcome!
+          </div>
+          <div className='flex justify-center'>
+            <a
+              href={`https://github.com/login/oauth/authorize?scope=user%20repo%20public_repo&client_id=${clientID}&redirect_uri=${redirectURI}`}
+            >
+              <Button onClick={() => {}}>Login with GitHub</Button>
+            </a>
+          </div>
+        </>
       )}
     </div>
   )
