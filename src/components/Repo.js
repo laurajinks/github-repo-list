@@ -46,7 +46,7 @@ const handleSubmit = () => {
           <a href={owner.url} target='_blank' className='mr-5'>
             <img src={owner.avatarUrl} alt='avatar' />
           </a>
-      <a href={url} target='_blank' className='hover:text-gray-600'>
+      <a href={url} target='_blank' className='hover:text-gray-500'>
         {nameWithOwner}
       </a>
         </div>
